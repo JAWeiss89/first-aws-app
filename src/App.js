@@ -10,7 +10,7 @@ function App() {
   const [bucketContents, setBucketContents] = useState(null);
 
   useEffect(() => {
-    async function getPicture() {
+    function getPicture() {
     try {
       aws.config.setPromisesDependency();
       aws.config.update({
@@ -20,17 +20,18 @@ function App() {
       });
   
       const s3 = new aws.S3();
-      const response = await s3.listObjectsV2({
+      s3.listObjectsV2({
         Bucket: 'imagestest07'
       }, function(err, data) {
         if (err) {
           console.log("Errrror")
         } else {
-          console.log(data);
+          console.log({data})
+          setBucketContents(data.Contents)
         }
       });
-      setBucketContents(response);
-      console.log({response})
+      
+      
 
     } catch(e) {
       console.log("Error!", e);
@@ -46,8 +47,14 @@ function App() {
         <h1>Connecting to AWS</h1>
         <p>Images from S3 bucket below</p>
         {bucketContents 
-        ? <h2>bucket contents has loaded</h2>
-        : <h2>Loading</h2>} 
+        ? <div>
+          {bucketContents.map((fileName) => {
+            return (
+              <img src={`https://imagestest07.s3.us-east-2.amazonaws.com/${fileName.Key}`} alt={fileName.Key} key={fileName.Key} style={{width: "80%"}}/>
+            )
+          })}
+        </div>
+        : <h2>Loading</h2>}
         <ImageUploadForm />
     </div>
   );
