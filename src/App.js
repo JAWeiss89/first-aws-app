@@ -5,7 +5,6 @@ import keys from "./config.json";
 import aws from 'aws-sdk';
 
 
-
 function App() {
   const [bucketContents, setBucketContents] = useState(null);
 
@@ -42,6 +41,10 @@ function App() {
   
   }, []);
 
+
+
+  
+
   return (
     <div className="App">
         <h1>Connecting to AWS</h1>
@@ -55,6 +58,7 @@ function App() {
           })}
         </div>
         : <h2>Loading</h2>}
+        <h2>Upload Image: </h2>
         <ImageUploadForm />
     </div>
   );
